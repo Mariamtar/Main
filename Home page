@@ -1,0 +1,193 @@
+import 'package:flutter/material.dart';
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int _selectedIndex = 0;
+
+  final List<Widget> _pages = [
+    HomeScreen(),
+    CourtsScreen(),
+    NutritionScreen(),
+    SessionsScreen(),
+    AccountScreen(),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: _pages[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.sports_tennis), label: "Courts"),
+          BottomNavigationBarItem(icon: Icon(Icons.restaurant), label: "Nutrition"),
+          BottomNavigationBarItem(icon: Icon(Icons.schedule), label: "Sessions"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Account"),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.grey,
+        onTap: _onItemTapped,
+      ),
+    );
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // App Bar
+          AppBar(
+            backgroundColor: Colors.white,
+            elevation: 0,
+            title: const Text("Hello, Ahmed!",
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(right: 16.0),
+                child: Icon(Icons.notifications, color: Colors.black),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: TextField(
+              decoration: InputDecoration(
+                icon: Icon(Icons.search, color: Colors.grey),
+                hintText: "Search",
+                border: InputBorder.none,
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+
+          // Sports Categories
+          SizedBox(
+            height: 120,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                _buildCategory("Padel", "images/padel.png"),
+                _buildCategory("Volleyball", "images/volleyball.png"),
+                _buildCategory("Frisbee", "images/frisbee.png"),
+                _buildCategory("Tennis", "images/tennis.png"),
+                _buildCategory("Football", "images/football.JFIF"),
+                _buildCategory("Basketball", "images/basketball.JFIF"),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 30),
+
+          // Offers Section
+          const Text("On the spot offers!",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 10),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: _buildOffersSection(),
+          ),
+
+          const SizedBox(height: 10),
+
+          // Courts List
+          const Text("Yalla, Check available courts!",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 10),
+          _buildCourt("Goal", "Football-Padel-Tennis", "images/goal.png"),
+          _buildCourt("Maze", "Football-Frisbee-Padel", "images/maze.png"),
+          _buildCourt("Number1", "Padel-Squash-Tennis", "images/number1.png"),
+          _buildCourt("el7arefa", "Football", "images/harefa.png"),
+          _buildCourt("Zohour", "Basketball-Football", "images/zohour.png"),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCategory(String name, String imagePath) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Column(
+        children: [
+          CircleAvatar(
+            backgroundImage: AssetImage(imagePath),
+            radius: 40,
+          ),
+          const SizedBox(height: 5),
+          Text(name, style: const TextStyle(fontSize: 12)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCourt(String name, String details, String imagePath) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: ListTile(
+        leading: Image.asset(imagePath, width: 50, height: 50),
+        title: Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
+        subtitle: Text(details),
+      ),
+    );
+  }
+
+  Widget _buildOffersSection() {
+    return Row(
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Image.asset("images/basket.png", width: 150, height: 240),
+        ),
+        const SizedBox(width: 5),
+        Column(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.asset("images/discount.png", width: 120, height: 100),
+            ),
+            const SizedBox(height: 10),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.asset("images/promo.png", width: 136, height: 98),
+            ),
+
+
+          ],
+        ),
+
+      ],
+    );
+  }
+}
+
+// Placeholder Screens
+class CourtsScreen extends StatelessWidget { @override Widget build(BuildContext context) => Center(child: Text("Courts Screen")); }
+class NutritionScreen extends StatelessWidget { @override Widget build(BuildContext context) => Center(child: Text("Nutrition Screen")); }
+class SessionsScreen extends StatelessWidget { @override Widget build(BuildContext context) => Center(child: Text("Sessions Screen")); }
+class AccountScreen extends StatelessWidget { @override Widget build(BuildContext context) => Center(child: Text("Account Screen")); }
+
+void main() {
+  runApp(MaterialApp(debugShowCheckedModeBanner: false, home: HomePage()));
+}
